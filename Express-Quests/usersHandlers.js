@@ -45,8 +45,28 @@ const postUsers = (req, res) => {
     });
 };
 
+const putUsers = (req, res) => {
+  database
+    .query(
+      "update users set firstname =?, lastname =?, email =?, city =?, language =? where id =?",
+      [firstname, lastname, email, city, language, req.params.id]
+    )
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.status(404).send("Not Found");
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).send("Error saving the movie");
+    });
+};
+
 module.exports = {
   getUsers,
   getUserById,
   postUsers,
+  putUsers,
 };
